@@ -10,11 +10,13 @@ from typing import Any
 # Use requests.
 import requests
 
+
 ##############################################################################
 def log(*lines: str) -> None:
     """Log some text to the console."""
     for line in lines:
         print(line)
+
 
 ##############################################################################
 def download_pins(token: str) -> list[dict[str, str]]:
@@ -33,7 +35,10 @@ def download_pins(token: str) -> list[dict[str, str]]:
     """
     if Path(token).exists():
         return loads(Path(token).read_text())
-    return requests.get(f"https://api.pinboard.in/v1/posts/all?auth_token={token}&format=json").json()
+    return requests.get(
+        f"https://api.pinboard.in/v1/posts/all?auth_token={token}&format=json"
+    ).json()
+
 
 ##############################################################################
 def upload_raindrops(token: str, raindrops: list[dict[str, Any]]) -> None:
@@ -47,12 +52,11 @@ def upload_raindrops(token: str, raindrops: list[dict[str, Any]]) -> None:
         log(f"Uploading raindrop batch {progress}")
         requests.post(
             "https://api.raindrop.io/rest/v1/raindrops",
-            headers={
-                "Authorization": f"Bearer {token}"
-            },
-            json={"items": batch}
+            headers={"Authorization": f"Bearer {token}"},
+            json={"items": batch},
         )
         log(f"Finished raindrop batch {progress}")
+
 
 ##############################################################################
 def to_raindrop(pin: dict[str, str], public: int, private: int) -> dict[str, Any]:
@@ -75,13 +79,14 @@ def to_raindrop(pin: dict[str, str], public: int, private: int) -> dict[str, Any
         "tags": pin["tags"].split(),
     }
     if pin["toread"] == "no":
-        raindrop["collection"] = {
-            "$id": public if pin["shared"] == "yes" else private
-        }
+        raindrop["collection"] = {"$id": public if pin["shared"] == "yes" else private}
     return raindrop
 
+
 ##############################################################################
-def convert(pins: list[dict[str, str]], public: int, private: int) -> list[dict[str, Any]]:
+def convert(
+    pins: list[dict[str, str]], public: int, private: int
+) -> list[dict[str, Any]]:
     """Convert a list of pins into a list of raindrops.
 
     Args:
@@ -91,6 +96,7 @@ def convert(pins: list[dict[str, str]], public: int, private: int) -> list[dict[
         A list of raindrops for uploading.
     """
     return [to_raindrop(pin, public, private) for pin in pins]
+
 
 ##############################################################################
 def find_collections(arguments: Namespace) -> tuple[int | None, int | None]:
@@ -105,9 +111,7 @@ def find_collections(arguments: Namespace) -> tuple[int | None, int | None]:
     """
     collections = requests.get(
         "https://api.raindrop.io/rest/v1/collections",
-        headers={
-            "Authorization": f"Bearer {arguments.raindrop_token}"
-        }
+        headers={"Authorization": f"Bearer {arguments.raindrop_token}"},
     ).json()
     public, private = None, None
     if collections["result"]:
@@ -118,6 +122,7 @@ def find_collections(arguments: Namespace) -> tuple[int | None, int | None]:
                 case (arguments.private, _id):
                     private = _id
     return public, private
+
 
 ##############################################################################
 def get_args() -> Namespace:
@@ -134,17 +139,20 @@ def get_args() -> Namespace:
     parser.add_argument("pinboard_token")
     parser.add_argument("raindrop_token")
     parser.add_argument(
-        "-u", "--public",
+        "-u",
+        "--public",
         default="Public",
-        help="The name of the public collection in Raindrop"
+        help="The name of the public collection in Raindrop",
     )
     parser.add_argument(
-        "-r", "--private",
+        "-r",
+        "--private",
         default="Private",
-        help="The name of the private collection in Raindrop"
+        help="The name of the private collection in Raindrop",
     )
 
     return parser.parse_args()
+
 
 ##############################################################################
 def main() -> None:
@@ -166,6 +174,7 @@ def main() -> None:
     else:
         log(f"Found private collection named '{arguments.private}' ({private})")
     upload_raindrops(arguments.raindrop_token, convert(pins, public, private))
+
 
 ##############################################################################
 # Allow running as a module.
