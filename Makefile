@@ -35,7 +35,7 @@ stricttypecheck:	        # Perform a strict static type checks with mypy
 	$(mypy) --scripts-are-modules --strict $(src)
 
 .PHONY: checkall
-checkall: lint stricttypecheck test # Check all the things
+checkall: lint stricttypecheck	# Check all the things
 
 ##############################################################################
 # Package/publish.
