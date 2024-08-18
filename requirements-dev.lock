@@ -16,7 +16,14 @@ charset-normalizer==3.3.2
     # via requests
 idna==3.7
     # via requests
+mypy==1.11.1
+mypy-extensions==1.0.0
+    # via mypy
 requests==2.32.3
     # via paindrop
+types-requests==2.32.0.20240712
+typing-extensions==4.12.2
+    # via mypy
 urllib3==2.2.2
     # via requests
+    # via types-requests
