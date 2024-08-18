@@ -1,15 +1,23 @@
 [project]
 name = "paindrop"
-version = "0.0.1"
+version = "1.0.0"
 description = "A command line tool that imports Pinboard data into Raindrop"
 authors = [
     { name = "Dave Pearson", email = "davep@davep.org" }
 ]
+license = { file = "LICENSE" }
 dependencies = [
     "requests>=2.32.3",
 ]
 readme = "README.md"
+keywords = ["cli", "importer", "importing", "pinboard", "raindrop", "migration", "bookmarking"]
 requires-python = ">= 3.12"
+
+[project.urls]
+Homepage = "https://github.com/davep/paindrop"
+Repository = "https://github.com/davep/paindrop"
+Documentation = "https://github.com/davep/paindrop"
+Issues = "https://github.com/davep/paindrop/issues"
 
 [project.scripts]
 paindrop = "paindrop.__main__:main"
