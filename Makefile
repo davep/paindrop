@@ -47,16 +47,12 @@ package:			# Package the library
 spackage:			# Create a source package for the library
 	rye build --sdist
 
-.PHONY: packagecheck
-packagecheck: package spackage		# Check the packaging.
-	$(twine) check dist/*
-
 .PHONY: testdist
-testdist: packagecheck		# Perform a test distribution
+testdist: package			# Perform a test distribution
 	rye publish --repository testpypi --repository-url https://test.pypi.org/legacy/
 
 .PHONY: dist
-dist: packagecheck		# Upload to pypi
+dist: package			# Upload to pypi
 	rye publish
 
 ##############################################################################
