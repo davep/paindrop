@@ -98,4 +98,9 @@ collections you can pass those names to `paindrop` with the `--public` and
 If you need help please feel free to [raise an
 issue](https://github.com/davep/paindrop/issues).
 
+## Thanks
+
+Many thanks to [Darren](https://github.com/darrenburns) who [suggested the
+name](https://fosstodon.org/@darrenburns/112978377299333401).
+
 [//]: # (README.md ends here)
