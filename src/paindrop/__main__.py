@@ -35,9 +35,11 @@ def download_pins(token: str) -> list[dict[str, str]]:
     """
     return cast(
         list[dict[str, str]],
-        loads(Path(token).read_text()) if Path(token).exists() else requests.get(
+        loads(Path(token).read_text())
+        if Path(token).exists()
+        else requests.get(
             f"https://api.pinboard.in/v1/posts/all?auth_token={token}&format=json"
-        ).json()
+        ).json(),
     )
 
 
