@@ -93,21 +93,29 @@ def convert(pins: list[dict[str, str]], public: int, private: int) -> list[dict[
     return [to_raindrop(pin, public, private) for pin in pins]
 
 ##############################################################################
-def find_collections(token: str) -> tuple[int | None, int | None]:
-    """"""
+def find_collections(arguments: Namespace) -> tuple[int | None, int | None]:
+    """Find the collections in Raindrop.
+
+    Args:
+        arguments: The command line arguments.
+
+    Returns:
+        A tuple of the public and private collection IDs, or `None` for
+        either that can't be found.
+    """
     collections = requests.get(
         "https://api.raindrop.io/rest/v1/collections",
         headers={
-            "Authorization": f"Bearer {token}"
+            "Authorization": f"Bearer {arguments.raindrop_token}"
         }
     ).json()
     public, private = None, None
     if collections["result"]:
         for collection in collections["items"]:
             match (collection["title"], collection["_id"]):
-                case ("Public", _id):
+                case (arguments.public, _id):
                     public = _id
-                case ("Private", _id):
+                case (arguments.private, _id):
                     private = _id
     return public, private
 
@@ -125,6 +133,16 @@ def get_args() -> Namespace:
 
     parser.add_argument("pinboard_token")
     parser.add_argument("raindrop_token")
+    parser.add_argument(
+        "-u", "--public",
+        default="Public",
+        help="The name of the public collection in Raindrop"
+    )
+    parser.add_argument(
+        "-r", "--private",
+        default="Private",
+        help="The name of the private collection in Raindrop"
+    )
 
     return parser.parse_args()
 
@@ -136,10 +154,17 @@ def main() -> None:
     pins = download_pins(arguments.pinboard_token)
     log(f"Downloaded {len(pins)} pins from Pinboard")
     log("Finding Public and Private collections in Raindrop")
-    public, private = find_collections(arguments.raindrop_token)
-    if public is None or private is None:
-        log("Could not find the public and private collections")
+    public, private = find_collections(arguments)
+    if public is None:
+        log(f"Could not find public collection named '{arguments.public}'")
         exit(1)
+    else:
+        log(f"Found public collection named '{arguments.public}' ({public})")
+    if private is None:
+        log(f"Could not find private collection named '{arguments.private}'")
+        exit(1)
+    else:
+        log(f"Found private collection named '{arguments.private}' ({private})")
     upload_raindrops(arguments.raindrop_token, convert(pins, public, private))
 
 ##############################################################################
