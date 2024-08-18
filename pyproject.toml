@@ -1,5 +1,5 @@
 [project]
-name = "pin2rain"
+name = "paindrop"
 version = "0.1.0"
 description = "Add your description here"
 authors = [
@@ -23,4 +23,4 @@ dev-dependencies = []
 allow-direct-references = true
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/pin2rain"]
+packages = ["src/paindrop"]

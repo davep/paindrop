@@ -119,7 +119,7 @@ def get_args() -> Namespace:
         The command line arguments.
     """
     parser = ArgumentParser(
-        prog="pin2rain",
+        prog="paindrop",
         description="A tool for importing pins from Pinboard, into Raindrop",
     )
 
