@@ -1,6 +1,6 @@
 [project]
 name = "paindrop"
-version = "0.1.0"
+version = "0.0.1"
 description = "A command line tool that imports Pinboard data into Raindrop"
 authors = [
     { name = "Dave Pearson", email = "davep@davep.org" }
