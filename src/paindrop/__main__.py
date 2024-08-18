@@ -4,7 +4,7 @@ from argparse import ArgumentParser, Namespace
 from itertools import batched
 from json import loads
 from pathlib import Path
-from typing import Any
+from typing import Any, cast
 
 ##############################################################################
 # Use requests.
@@ -33,11 +33,12 @@ def download_pins(token: str) -> list[dict[str, str]]:
         it will be read and parsed as JSON instead. This means it can act as
         a simple cache.
     """
-    if Path(token).exists():
-        return loads(Path(token).read_text())
-    return requests.get(
-        f"https://api.pinboard.in/v1/posts/all?auth_token={token}&format=json"
-    ).json()
+    return cast(
+        list[dict[str, str]],
+        loads(Path(token).read_text()) if Path(token).exists() else requests.get(
+            f"https://api.pinboard.in/v1/posts/all?auth_token={token}&format=json"
+        ).json()
+    )
 
 
 ##############################################################################
@@ -70,7 +71,7 @@ def to_raindrop(pin: dict[str, str], public: int, private: int) -> dict[str, Any
     Returns:
         The raindrop made from the pin.
     """
-    raindrop = {
+    raindrop: dict[str, Any] = {
         "link": pin["href"],
         "title": pin["description"],
         "note": pin["extended"],
