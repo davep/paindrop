@@ -49,11 +49,11 @@ spackage:			# Create a source package for the library
 
 .PHONY: testdist
 testdist: package			# Perform a test distribution
-	rye publish --repository testpypi --repository-url https://test.pypi.org/legacy/
+	rye publish --yes --skip-existing --repository testpypi --repository-url https://test.pypi.org/legacy/
 
 .PHONY: dist
 dist: package			# Upload to pypi
-	rye publish
+	rye publish --yes --skip-existing
 
 ##############################################################################
 # Utility.
