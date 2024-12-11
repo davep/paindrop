@@ -20,6 +20,9 @@ public bookmarks, one for private bookmarks. Pins that are marked as
 "unread" are left with no collection (so the act of "marking read" will be
 dropping it into either the Public or Private collection).
 
+You can read a little more about the background and motivation for creating
+this tool [over on my blog](https://blog.davep.org/2024/08/18/paindrop.html).
+
 ## Installing
 
 ### pipx
